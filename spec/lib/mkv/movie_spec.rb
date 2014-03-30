@@ -7,21 +7,34 @@ describe MKV::Movie, '#new' do
   end
 
   it 'assigns the path accordingly' do
-    path  = '/home/eric/Downloads/my_foo.mkv'
     movie = MKV::Movie.new path
     expect(movie.path).to eq path
   end
 
   it 'assigns tracks to the movie' do
-    path  = '/home/eric/Downloads/my_foo.mkv'
     movie = MKV::Movie.new path
     expect(movie.tracks.first).to be_a MKV::Track
   end
 end
 
+describe MKV::Movie, '#tracks' do
+  it 'gets the tracks for the movie' do
+    movie = MKV::Movie.new path
+    expect(movie.tracks.first).to be_a MKV::Track
+  end
+end
+
+describe MKV::Movie, '#invalid?' do
+  it 'is invalid for trackless movie' do
+    pending
+    movie = MKV::Movie.new('/home/eric/Downloads/my_bar.mkv')
+    expect(movie).to be_invalid
+  end
+end
+
+
 describe MKV::Movie, '#has_video?' do
   it 'tells us when we have videos' do
-    path = '/home/eric/Downloads/my_foo.mkv'
     movie = MKV::Movie.new path
     expect(movie).to have_video
   end
@@ -29,7 +42,6 @@ end
 
 describe MKV::Movie, '#has_audio?' do
   it 'tells us when we have audios' do
-    path = '/home/eric/Downloads/my_foo.mkv'
     movie = MKV::Movie.new path
     expect(movie).to have_audio
   end
@@ -70,11 +82,12 @@ describe MKV::Movie, '#extract_subtitles' do
       .to raise_error(MKV::Error)
   end
 
-  def path
-    '/home/eric/Downloads/my_foo.mkv'
-  end
-
   def destination
     File.dirname(path)
   end
+end
+
+
+def path
+  '/home/eric/Downloads/my_foo.mkv'
 end

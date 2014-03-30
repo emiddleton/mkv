@@ -5,34 +5,30 @@ module MKV
     @@timeout = 200
 
     attr_reader :path
-    attr_reader :tracks
 
     def initialize(path)
       raise Errno::ENOENT, "the file '#{path}' does not exist" unless File.exists?(path)
 
       @path = path
-
-      # mkvinfo will output to stdout
-      command = "#{MKV.mkvinfo_binary} #{Shellwords.escape(path)}"
       MKV.logger.info(command)
-      output = Open3.popen3(command) { |stdin, stdout, stderr| stdout.read}
+    end
 
-      match = output.gsub(/\n/, '$$').match /\|\+\ssegment tracks(.*?)\|\+\s(?:chapters|cluster)/i
-      tracks = match[1].gsub(/\$\$/, "\n")
-      match_tracks = tracks.gsub(/\n/, '$$').scan(/a track(.*?)(?:\|\s\+|$)/i)
-      match_tracks = match_tracks.map { |x| x.first.gsub(/\$\$/, "\n") }
+    def tracks
+      match_tracks = match(output)
 
-      @tracks = match_tracks.map do |track_data|
+      @tracks ||= match_tracks.map do |track_data|
         MKV::Track.new track_data
       end
+    end
 
-      @invalid = true unless @tracks.any?
+    def invalid?
+      @invalid = true unless tracks.any?
       @invalid = true if output.include?("is not supported")
       @invalid = true if output.include?("could not find codec parameters")
     end
 
     def valid?
-      not @invalid
+      not invalid?
     end
 
     def has_video? ; tracks.select { |t| t.type == 'video' }.any? ; end
@@ -93,6 +89,23 @@ module MKV
           raise MKV::Error, "Process hung. Full output: #{output}"
         end
       end
+    end
+
+    private
+
+    def match(output)
+      match = output.gsub(/\n/, '$$').match(/\|\+\ssegment tracks(.*?)\|\+\s(?:chapters|cluster)/i)
+      tracks = match[1].gsub(/\$\$/, "\n")
+      match_tracks = tracks.gsub(/\n/, '$$').scan(/a track(.*?)(?:\|\s\+|$)/i)
+      match_tracks = match_tracks.map { |x| x.first.gsub(/\$\$/, "\n") }
+    end
+
+    def output
+      @output ||= Open3.popen2(command) { |stdin, stdout| stdout.read }
+    end
+
+    def command
+      "#{MKV.mkvinfo_binary} #{Shellwords.escape(path)}"
     end
   end
 end
