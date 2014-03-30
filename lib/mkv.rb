@@ -4,7 +4,6 @@ require 'logger'
 require 'stringio'
 require 'shellwords'
 require 'open3'
-require 'awesome_print'
 
 require 'mkv/version'
 require 'mkv/error'
@@ -21,7 +20,7 @@ module MKV
   def self.logger=(log)
     @logger = log
   end
-  
+
   # Get MKV logger.
   #
   # @return [Logger]
@@ -64,7 +63,7 @@ module MKV
     @mkvextract_binary.nil? ? default_mkvextract_binary : @mkvextract_binary
   end
 
-  private 
+  private
 
     def self.default_mkvinfo_binary
       if is_macosx?
