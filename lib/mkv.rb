@@ -65,20 +65,22 @@ module MKV
 
   private
 
-    def self.default_mkvinfo_binary
-      if is_macosx?
-        "/Applications/Mkvtoolnix.app/Contents/MacOS/mkvinfo"
-      else
-      end
+  def self.default_mkvinfo_binary
+    if is_macosx?
+      "/Applications/Mkvtoolnix.app/Contents/MacOS/mkvinfo"
+    else
+      'mkvinfo'
     end
+  end
 
-    def self.default_mkvextract_binary
-      if is_macosx?
-        "/Applications/Mkvtoolnix.app/Contents/MacOS/mkvextract"
-      else
-      end
+  def self.default_mkvextract_binary
+    if is_macosx?
+      "/Applications/Mkvtoolnix.app/Contents/MacOS/mkvextract"
+    else
+      'mkvextract'
     end
+  end
 
-    def self.is_windows? ; RUBY_PLATFORM =~/.*?mingw.*?/i ; end
-    def self.is_macosx? ; RUBY_PLATFORM =~/.*?darwin.*?/i ; end
+  def self.is_windows? ; RUBY_PLATFORM =~/.*?mingw.*?/i ; end
+  def self.is_macosx? ; RUBY_PLATFORM =~/.*?darwin.*?/i ; end
 end

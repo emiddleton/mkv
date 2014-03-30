@@ -65,8 +65,8 @@ module MKV
 
         output = ""
         start_time = Time.now.to_i
-        Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
-          begin
+        begin
+          Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
             yield(0.0, 0, destination_filename) if block_given?
             next_line = Proc.new do |line|
               output << line
@@ -87,11 +87,10 @@ module MKV
             else
               stdout.each("r", &next_line)
             end
-
-          rescue Timeout::Error => e
-            MKV.logger.error "Process hung...\nCommand\n#{command}\nOutput\n#{output}\n"
-            raise MKV::Error, "Process hung. Full output: #{output}"
           end
+        rescue Timeout::Error => e
+          MKV.logger.error "Process hung...\nCommand\n#{command}\nOutput\n#{output}\n"
+          raise MKV::Error, "Process hung. Full output: #{output}"
         end
       end
     end
