@@ -1,6 +1,6 @@
 module MKV
   class AudioTrack < Track
-    attr_reader :sampling_frequency, :channels
+    attr_reader :sampling_frequency, :channels, :language, :enabled, :default_flag, :forced_flag
 
     def initialize(data)
       super(data)
