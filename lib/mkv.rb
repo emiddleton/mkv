@@ -10,6 +10,8 @@ require 'mkv/error'
 require 'mkv/io_patch'
 require 'mkv/movie'
 require 'mkv/track'
+require 'mkv/video_track'
+require 'mkv/audio_track'
 
 module MKV
   # MKV logs information about its progress when it's transcoding.

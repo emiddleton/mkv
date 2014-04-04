@@ -14,9 +14,7 @@ module MKV
     end
 
     def tracks
-      match_tracks = match(output)
-
-      @tracks ||= match_tracks.map do |track_data|
+      @tracks ||= parse.map do |track_data|
         MKV::Track.new track_data
       end
     end
@@ -93,11 +91,11 @@ module MKV
 
     private
 
-    def match(output)
-      match = output.gsub(/\n/, '$$').match(/\|\+\ssegment tracks(.*?)\|\+\s(?:chapters|cluster)/i)
-      tracks = match[1].gsub(/\$\$/, "\n")
-      match_tracks = tracks.gsub(/\n/, '$$').scan(/a track(.*?)(?:\|\s\+|$)/i)
-      match_tracks = match_tracks.map { |x| x.first.gsub(/\$\$/, "\n") }
+    def parse
+      output.split("| + A track")[1..-1].each.map { |track|
+        a3 = track.scan(/\|\s+\+\s+([^\:]+):\s([^\n[\s(])]+)/)
+        Hash[a3.map {|key, value| [key.downcase.gsub(' ', '_').to_sym, value]}]
+      }
     end
 
     def output
