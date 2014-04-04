@@ -12,4 +12,12 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.before(:all) do
+    MKV.logger = Logger.new(StringIO.new)
+  end
+
+  config.after(:all) do
+    MKV.logger = nil
+  end
 end
