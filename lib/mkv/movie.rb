@@ -15,7 +15,7 @@ module MKV
 
     def tracks
       @tracks ||= parse.map do |track_data|
-        MKV::Track.new track_data
+        constantize(track_data[:track_type]).new(track_data)
       end
     end
 
@@ -93,7 +93,7 @@ module MKV
 
     def parse
       output.split("| + A track")[1..-1].each.map { |track|
-        a3 = track.scan(/\|\s+\+\s+([^\:]+):\s([^\n[\s(])]+)/)
+        a3 = track.scan(/\|\s+\+\s+([^\:|^\n]+):\s([^\n[\s(])]+)/)
         Hash[a3.map {|key, value| [key.downcase.gsub(' ', '_').to_sym, value]}]
       }
     end
@@ -104,6 +104,12 @@ module MKV
 
     def command
       "#{MKV.mkvinfo_binary} #{Shellwords.escape(path)}"
+    end
+
+    def constantize(type)
+      Module.const_get("MKV::#{type.capitalize}Track")
+    rescue
+      MKV::Track
     end
   end
 end

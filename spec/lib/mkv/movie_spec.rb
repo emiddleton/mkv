@@ -20,7 +20,16 @@ end
 describe MKV::Movie, '#tracks' do
   it 'gets the tracks for the movie' do
     movie = MKV::Movie.new path
+    expect(movie.tracks.first).to be_a MKV::VideoTrack
+    expect(movie.tracks.last).to be_a MKV::SubtitlesTrack
+  end
+
+  it 'generates a new generic track when no track is found' do
+    movie = MKV::Movie.new path
+    Module.stub(:const_get).and_raise NameError
+
     expect(movie.tracks.first).to be_a MKV::Track
+    expect(movie.tracks.last).to be_a MKV::Track
   end
 end
 
@@ -86,7 +95,6 @@ describe MKV::Movie, '#extract_subtitles' do
     File.dirname(path)
   end
 end
-
 
 def path
   '/home/eric/Downloads/my_foo.mkv'
