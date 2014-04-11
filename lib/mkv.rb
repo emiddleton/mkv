@@ -13,6 +13,7 @@ require 'mkv/track'
 require 'mkv/video_track'
 require 'mkv/audio_track'
 require 'mkv/subtitles_track'
+require 'mkv/tracks'
 
 module MKV
   # MKV logs information about its progress when it's transcoding.
