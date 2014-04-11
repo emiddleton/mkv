@@ -42,10 +42,7 @@ module MKV
     end
 
     def extract_subtitles(options={})
-      # Compatibility with legacy method accepting a String for destination_dir (deprecated)
-      if options.class == String
-        options = { :destination_dir => options }
-      end
+      track_filter = track_filter(options[:language] || [])
 
       options[:language] ||= []
       options[:language] = [options[:language]].flatten.map(&:to_sym) if options[:language]
