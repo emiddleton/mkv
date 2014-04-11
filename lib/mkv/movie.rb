@@ -14,9 +14,7 @@ module MKV
     end
 
     def tracks
-      @tracks ||= parse.map do |track_data|
-        constantize(track_data[:track_type]).new(track_data)
-      end
+      @tracks ||= MKV::Tracks.new(get_tracks)
     end
 
     def invalid?
@@ -67,14 +65,20 @@ module MKV
     def constantize(type)
       Module.const_get("MKV::#{type.capitalize}Track")
     rescue
+      MKV::Track
+    end
+
+    def get_tracks
+      parse.map do |track_data|
+        constantize(track_data[:track_type]).new(track_data)
+      end
+    end
 
     def track_filter(language)
       language.map!(&:to_sym)
       language << :und if language.any?
 
       lambda { |t| language.include?(t.language) || language.empty? }
-    end
-      MKV::Track
     end
   end
 end
