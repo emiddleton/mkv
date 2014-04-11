@@ -10,7 +10,29 @@ end
 
 describe MKV::SubtitlesTrack, '#language' do
   it 'returns the language' do
-    expect(subtitles_track.language).to eq 'eng'
+    expect(subtitles_track.language).to eq :eng
+  end
+end
+
+describe MKV::Track, '#extract!' do
+  it 'extracts the track' do
+    path = '/blahblah.mkv'
+    track = subtitles_track
+    filepath = '/blahblah.3.eng.srt'
+
+    allow(Open3).to receive(:popen3)
+    track.extract!(path)
+    expect(Open3).to have_received(:popen3)
+      .with("#{MKV.mkvextract_binary} tracks \"#{path}\" #{track.mkv_info_id}:\"#{filepath}\"")
+  end
+
+  it 'Logs an error on time' do
+    path = '/blahblah.mkv'
+    track = subtitles_track
+
+    Open3.stub(:popen3).and_raise(Timeout::Error)
+    expect { track.extract!(path) }
+      .to raise_error(MKV::Error)
   end
 end
 

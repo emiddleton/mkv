@@ -42,49 +42,8 @@ module MKV
     def extract_subtitles(options={})
       track_filter = track_filter(options[:language] || [])
 
-      options[:language] ||= []
-      options[:language] = [options[:language]].flatten.map(&:to_sym) if options[:language]
-      options[:language] << :und if options[:language].any?
-
-      track_filter = lambda { |t| t.type == 'subtitles' && (options[:language].include?(t.language.to_sym) || options[:language].empty?) }
-
-      tracks.select(&track_filter).each do |track|
-        destination_fileextension = (options[:language].count == 1 ? "" : ".#{track.mkv_info_id}.#{track.language}") + ".srt"
-        destination_filename = File.basename(@path).gsub(/\.mkv$/i, destination_fileextension)
-        destination_dir = options[:destination_dir] || File.dirname(@path)
-
-        command = %Q[#{MKV.mkvextract_binary} tracks "#{@path}" #{track.mkv_info_id}:"#{File.join(destination_dir, destination_filename)}"]
-        MKV.logger.info(command)
-
-        output = ""
-        start_time = Time.now.to_i
-        begin
-          Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
-            yield(0.0, 0, destination_filename) if block_given?
-            next_line = Proc.new do |line|
-              output << line
-              if line =~ /(\d+)%/
-                progress = $1.to_i
-
-                yield(progress, Time.now.to_i - start_time, destination_filename) if block_given?
-              end
-
-              if line =~ /Unsupported codec/
-                MKV.logger.error "Failed encoding...\nCommand\n#{command}\nOutput\n#{output}\n"
-                raise "Failed encoding: #{line}"
-              end
-            end
-
-            if @@timeout
-              stdout.each_with_timeout(wait_thr.pid, @@timeout, "r", &next_line)
-            else
-              stdout.each("r", &next_line)
-            end
-          end
-        rescue Timeout::Error => e
-          MKV.logger.error "Process hung...\nCommand\n#{command}\nOutput\n#{output}\n"
-          raise MKV::Error, "Process hung. Full output: #{output}"
-        end
+      tracks.subtitles.select(&track_filter).each do |track|
+        track.extract!(@path, options)
       end
     end
 
@@ -108,6 +67,13 @@ module MKV
     def constantize(type)
       Module.const_get("MKV::#{type.capitalize}Track")
     rescue
+
+    def track_filter(language)
+      language.map!(&:to_sym)
+      language << :und if language.any?
+
+      lambda { |t| language.include?(t.language) || language.empty? }
+    end
       MKV::Track
     end
   end

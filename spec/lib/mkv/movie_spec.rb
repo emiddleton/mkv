@@ -75,22 +75,6 @@ describe MKV::Movie, '#extract_subtitles' do
     movie.extract_subtitles(language: [:fre])
   end
 
-  it 'specifies a destination' do
-    movie = MKV::Movie.new(path)
-    expect(Open3).to receive(:popen3)
-      .with("mkvextract tracks \"#{path}\" 2:\"/new_destination/my_foo.2.eng.srt\"")
-    expect(Open3).to receive(:popen3)
-      .with("mkvextract tracks \"#{path}\" 3:\"/new_destination/my_foo.3.fre.srt\"")
-    movie.extract_subtitles(destination_dir: "/new_destination/")
-  end
-
-  it 'Logs an error on time' do
-    movie = MKV::Movie.new(path)
-    Open3.stub(:popen3).and_raise(Timeout::Error)
-    expect { movie.extract_subtitles }
-      .to raise_error(MKV::Error)
-  end
-
   def destination
     File.dirname(path)
   end
