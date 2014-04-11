@@ -29,12 +29,16 @@ module MKV
       not invalid?
     end
 
-    def has_video? ; tracks.select { |t| t.type == 'video' }.any? ; end
-    def has_audio? ; tracks.select { |t| t.type == 'audio' }.any? ; end
+    def has_video?
+      tracks.video.any?
+    end
 
-    def has_subtitles?(language = nil)
-      language = [language].flatten if language
-      tracks.any? { |t| t.type == 'subtitles' && (language.nil? || language.empty? || language.include?(t.language)) }
+    def has_audio?
+      tracks.audio.any?
+    end
+
+    def has_subtitles?
+      tracks.subtitles.any?
     end
 
     def extract_subtitles(options={})
