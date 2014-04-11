@@ -20,13 +20,11 @@ module MKV
     end
 
     def invalid?
-      @invalid = true unless tracks.any?
-      @invalid = true if output.include?("is not supported")
-      @invalid = true if output.include?("could not find codec parameters")
+      not valid?
     end
 
     def valid?
-      not invalid?
+      @tracks.valid?
     end
 
     def has_video?
