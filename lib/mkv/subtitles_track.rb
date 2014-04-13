@@ -9,40 +9,47 @@ module MKV
       @default = data.fetch(:default_flag) != '0'
       @forced = data.fetch(:forced_flag) != '0'
     end
-    def extract!(path, options={})
-      options[:language] ||= []
 
-      destination_fileextension = (options[:language].count == 1 ? "" : ".#{mkv_info_id}.#{language}") + ".srt"
+    def extract!(path, destination = nil)
+      destination_file = destination(path, destination)
 
-      destination_filename = File.basename(path).gsub(/\.mkv$/i, destination_fileextension)
-      destination_dir = options[:destination_dir] || File.dirname(path)
+      command = %Q[#{MKV.mkvextract_binary} tracks "#{path}" #{mkv_info_id}:"#{destination_file}"]
 
-      command = %Q[#{MKV.mkvextract_binary} tracks "#{path}" #{mkv_info_id}:"#{File.join(destination_dir, destination_filename)}"]
       MKV.logger.info(command)
-
-      output = ""
       start_time = Time.now.to_i
+      output = ''
       Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
         yield(0.0, 0, destination_filename) if block_given?
-        next_line = Proc.new do |line|
-          output << line
-          if line =~ /(\d+)%/
-            progress = $1.to_i
-
-            yield(progress, Time.now.to_i - start_time, destination_filename) if block_given?
-          end
-
-          if line =~ /Unsupported codec/
-            MKV.logger.error "Failed encoding...\nCommand\n#{command}\nOutput\n#{output}\n"
-            raise "Failed encoding: #{line}"
-          end
-        end
-
+        next_line = next_line(line, filename, start_time, output)
         stdout.each_with_timeout(wait_thr.pid, 200, "r", &next_line)
       end
     rescue Timeout::Error
-      MKV.logger.error "Process hung...\nCommand\n#{command}\nOutput\n#{output}\n"
+        MKV.logger.error "Process hung...\nCommand\n#{command}\nOutput\n#{output}\n"
       raise MKV::Error, "Process hung. Full output: #{output}"
+    end
+
+    private
+
+    def next_line(line, filename, start_time, output)
+      if line =~ /(\d+)%/
+        progress = $1.to_i
+        yield(progress, Time.now.to_i - start_time, filename) if block_given?
+      end
+      if line =~ /Unsupported codec/
+        MKV.logger.error "Failed encoding...\nCommand\n#{command}\nOutput\n#{output}\n"
+        raise "Failed encoding: #{line}"
+      end
+    end
+
+    def filename(path)
+      extension = ".#{mkv_info_id}.#{language}.srt"
+      File.basename(path).gsub(/\.mkv$/i, extension)
+    end
+
+    def destination(path, destination = nil)
+      filename = filename(path)
+      destination = destination || File.dirname(path)
+      File.join(destination, filename)
     end
   end
 end

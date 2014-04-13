@@ -1,5 +1,3 @@
-require 'time'
-
 module MKV
   class Movie
     @@timeout = 200
@@ -41,17 +39,17 @@ module MKV
       track_filter = track_filter(options[:language] || [])
 
       tracks.subtitles.select(&track_filter).each do |track|
-        track.extract!(@path, options)
+        track.extract!(@path, options[:destination_dir])
       end
     end
 
     private
 
     def parse
-      output.split("| + A track")[1..-1].each.map { |track|
+      output.split("| + A track")[1..-1].each.map do |track|
         a3 = track.scan(/\|\s+\+\s+([^\:|^\n]+):\s([^\n[\s(])]+)/)
         Hash[a3.map {|key, value| [key.downcase.gsub(' ', '_').to_sym, value]}]
-      }
+      end
     end
 
     def output

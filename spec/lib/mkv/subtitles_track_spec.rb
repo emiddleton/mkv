@@ -34,6 +34,18 @@ describe MKV::Track, '#extract!' do
     expect { track.extract!(path) }
       .to raise_error(MKV::Error)
   end
+
+  it 'extracts into a specific destination' do
+    path = '/home/user/movies/a_movie.mkv'
+    track = subtitles_track
+    destination = '/'
+    filepath = '/a_movie.3.eng.srt'
+
+    allow(Open3).to receive(:popen3)
+    track.extract!(path, destination)
+    expect(Open3).to have_received(:popen3)
+      .with("#{MKV.mkvextract_binary} tracks \"#{path}\" #{track.mkv_info_id}:\"#{filepath}\"")
+  end
 end
 
 def subtitles_track
