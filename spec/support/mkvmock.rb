@@ -90,6 +90,67 @@ class MKVMock
 |  + Language: fre
 |  + Name: French
 |+ EbmlVoid (size: 1024)
+|+ Chapters
+| + EditionEntry
+|  + EditionFlagHidden: 0
+|  + EditionFlagDefault: 0
+|  + EditionUID: 4159917494
+|  + ChapterAtom
+|   + ChapterUID: 1789432733
+|   + ChapterTimeStart: 00:00:00.000000000
+|   + ChapterFlagHidden: 0
+|   + ChapterFlagEnabled: 1
+|   + ChapterDisplay
+|    + ChapterString: Chapter 1
+|    + ChapterLanguage: eng
+|  + ChapterAtom
+|   + ChapterUID: 4070566840
+|   + ChapterTimeStart: 00:01:31.067000000
+|   + ChapterFlagHidden: 0
+|   + ChapterFlagEnabled: 1
+|   + ChapterDisplay
+|    + ChapterString: Chapter 2
+|    + ChapterLanguage: eng
+|  + ChapterAtom
+|   + ChapterUID: 3962471066
+|   + ChapterTimeStart: 00:09:17.467000000
+|   + ChapterFlagHidden: 0
+|   + ChapterFlagEnabled: 1
+|   + ChapterDisplay
+|    + ChapterString: Chapter 3
+|    + ChapterLanguage: eng
+|  + ChapterAtom
+|   + ChapterUID: 354412440
+|   + ChapterTimeStart: 00:21:43.733000000
+|   + ChapterFlagHidden: 0
+|   + ChapterFlagEnabled: 1
+|   + ChapterDisplay
+|    + ChapterString: Chapter 4
+|    + ChapterLanguage: eng
+|  + ChapterAtom
+|   + ChapterUID: 2151990656
+|   + ChapterTimeStart: 00:23:13.600000000
+|   + ChapterFlagHidden: 0
+|   + ChapterFlagEnabled: 1
+|   + ChapterDisplay
+|    + ChapterString: Chapter 5
+|    + ChapterLanguage: eng
+|  + ChapterAtom
+|   + ChapterUID: 1334211745
+|   + ChapterTimeStart: 00:23:44.633000000
+|   + ChapterFlagHidden: 0
+|   + ChapterFlagEnabled: 1
+|   + ChapterDisplay
+|    + ChapterString: Chapter 6
+|    + ChapterLanguage: eng
+|  + ChapterAtom
+|   + ChapterUID: 3903151802
+|   + ChapterTimeStart: 00:25:14.867000000
+|   + ChapterFlagHidden: 0
+|   + ChapterFlagEnabled: 1
+|   + ChapterDisplay
+|    + ChapterString: Chapter 7
+|    + ChapterLanguage: eng
 |+ Cluster
 EOF
   end

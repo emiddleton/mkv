@@ -15,6 +15,12 @@ module MKV
       @tracks ||= MKV::Tracks.new(get_tracks)
     end
 
+    def chapters
+      parser.chapters.map do |chapter|
+        MKV::Chapter.new(chapter)
+      end
+    end
+
     def invalid?
       not valid?
     end
@@ -45,11 +51,8 @@ module MKV
 
     private
 
-    def parse
-      output.split("| + A track")[1..-1].each.map do |track|
-        a3 = track.scan(/\|\s+\+\s+([^\:|^\n]+):\s([^\n[\s(])]+)/)
-        Hash[a3.map {|key, value| [key.downcase.gsub(' ', '_').to_sym, value]}]
-      end
+    def parser
+      @parser ||= MKV::Parser.new(output)
     end
 
     def output
@@ -67,7 +70,7 @@ module MKV
     end
 
     def get_tracks
-      parse.map do |track_data|
+      parser.titles.map do |track_data|
         constantize(track_data[:track_type]).new(track_data)
       end
     end

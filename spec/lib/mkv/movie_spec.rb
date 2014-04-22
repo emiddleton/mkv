@@ -33,6 +33,19 @@ describe MKV::Movie, '#tracks' do
   end
 end
 
+describe MKV::Movie, '#chapters' do
+  it 'gets the chapters for the movie' do
+    movie = MKV::Movie.new path
+    MKV::Parser.stub(:new).and_return(
+      double(MKV::Parser,
+        chapters: [{chapter_time_start: 'cool',
+                    chapter_language: 'eng',
+                    chapter_uid: '123333'}]))
+    expect(movie.chapters.first).to be_a MKV::Chapter
+  end
+end
+
+
 describe MKV::Movie, '#invalid?' do
   it 'is invalid for trackless movie' do
     pending
