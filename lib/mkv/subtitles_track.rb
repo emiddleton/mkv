@@ -6,8 +6,6 @@ module MKV
       super(data)
       @language = data.fetch(:language).to_sym
       @enabled = data.fetch(:enabled)
-      @default = data.fetch(:default_flag) != '0'
-      @forced = data.fetch(:forced_flag) != '0'
     end
 
     def extract!(path, destination = nil)
