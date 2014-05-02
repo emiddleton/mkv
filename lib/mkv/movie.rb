@@ -16,9 +16,7 @@ module MKV
     end
 
     def chapters
-      parser.chapters.map do |chapter|
-        MKV::Chapter.new(chapter)
-      end
+      @chapters ||= MKV::Chapters.new(get_chapters)
     end
 
     def invalid?
@@ -49,6 +47,18 @@ module MKV
       end
     end
 
+    def duration
+      parser.duration.to_i
+    end
+
+    def episodes
+      chapters.episodes
+    end
+
+    def split_by_episode
+      episodes.split!
+    end
+
     private
 
     def parser
@@ -72,6 +82,12 @@ module MKV
     def get_tracks
       parser.titles.map do |track_data|
         constantize(track_data[:track_type]).new(track_data)
+      end
+    end
+
+    def get_chapters
+      parser.chapters.map do |chapter|
+        MKV::Chapter.new(chapter)
       end
     end
 

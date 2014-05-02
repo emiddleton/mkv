@@ -5,6 +5,8 @@ require 'stringio'
 require 'shellwords'
 require 'open3'
 
+require 'timestamp'
+
 require 'mkv/version'
 require 'mkv/error'
 require 'mkv/io_patch'
@@ -16,6 +18,10 @@ require 'mkv/subtitles_track'
 require 'mkv/tracks'
 require 'mkv/parser'
 require 'mkv/chapter'
+require 'mkv/chapters'
+require 'mkv/episode_factory'
+require 'mkv/episode'
+require 'mkv/track_factory'
 
 module MKV
   # MKV logs information about its progress when it's transcoding.

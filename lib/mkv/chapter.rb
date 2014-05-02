@@ -1,5 +1,7 @@
 module MKV
   class Chapter
+    attr_accessor :duration
+
     def initialize(attributes)
       @time_start = attributes.fetch(:chapter_time_start)
       @language = attributes.fetch(:chapter_language).to_sym

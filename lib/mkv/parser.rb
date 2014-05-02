@@ -18,6 +18,10 @@ module MKV
       end
     end
 
+    def duration
+      @data.scan(/\|[^\w]+Duration:\s(\d+)/).flatten.first
+    end
+
     private
 
     def to_hash(array)
