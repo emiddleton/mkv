@@ -73,15 +73,9 @@ module MKV
       "#{MKV.mkvinfo_binary} #{Shellwords.escape(path)}"
     end
 
-    def constantize(type)
-      Module.const_get("MKV::#{type.capitalize}Track")
-    rescue
-      MKV::Track
-    end
-
     def get_tracks
       parser.titles.map do |track_data|
-        constantize(track_data[:track_type]).new(track_data)
+        MKV::TrackFactory.for(track_data[:track_type]).new(track_data)
       end
     end
 
