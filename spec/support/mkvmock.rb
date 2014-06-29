@@ -156,7 +156,7 @@ EOF
   end
 end
 
-Rspec.configure do |config|
+RSpec.configure do |config|
   config.before(:each) do
     MKV::Movie.stub(:output).and_return(MKVMock.info)
   end

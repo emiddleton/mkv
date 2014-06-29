@@ -5,7 +5,9 @@ module MKV
     attr_reader :path
 
     def initialize(path)
-      raise Errno::ENOENT, "the file '#{path}' does not exist" unless File.exists?(path)
+      unless File.exists?(path)
+        raise Errno::ENOENT, "the file '#{path}' does not exist"
+      end
 
       @path = path
       MKV.logger.info(command)
@@ -86,9 +88,6 @@ module MKV
     end
 
     def track_filter(language)
-      language.map!(&:to_sym)
-      language << :und if language.any?
-
       lambda { |t| language.include?(t.language) || language.empty? }
     end
   end
