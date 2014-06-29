@@ -9,7 +9,14 @@ module MKV
     end
 
     def start_time
-      @start_time ||= Timestamp.new(@time_start).to_seconds
+      @start_time ||= ISO8601::Duration.new(parse_time).to_seconds
+    end
+
+    private
+
+    def parse_time
+      split_time = @time_start.split(':')
+      "PT#{split_time[0]}H#{split_time[1]}M#{split_time[2]}S"
     end
   end
 end

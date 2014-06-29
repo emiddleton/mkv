@@ -1,6 +1,5 @@
 require 'rspec'
 require 'mkv'
-require 'timestamp'
 require 'tmpdir'
 require 'fileutils'
 

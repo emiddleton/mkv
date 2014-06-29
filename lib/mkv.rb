@@ -4,8 +4,7 @@ require 'logger'
 require 'stringio'
 require 'shellwords'
 require 'open3'
-
-require 'timestamp'
+require 'iso8601'
 
 require 'mkv/version'
 require 'mkv/error'
