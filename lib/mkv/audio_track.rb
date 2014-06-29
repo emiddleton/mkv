@@ -5,8 +5,8 @@ module MKV
     def initialize(data)
       super(data)
       @sampling_frequency = data.fetch(:sampling_frequency).to_i
-      @channels = data.fetch(:channels).to_i
-      @language = data.fetch(:language)
+      @channels = data[:channels].to_i
+      @language = data[:language]
     end
   end
 end

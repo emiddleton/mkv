@@ -4,8 +4,8 @@ module MKV
 
     def initialize(data)
       super(data)
-      @language = data.fetch(:language).to_sym
-      @enabled = data.fetch(:enabled)
+      @language = (data[:language] || 'eng').to_sym
+      @enabled = data[:enabled] || false
     end
 
     def extract!(path, destination = nil)
@@ -18,7 +18,7 @@ module MKV
       output = ''
       Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
         yield(0.0, 0, destination_filename) if block_given?
-        next_line = next_line(line, filename, start_time, output)
+        next_line = next_line(destination_file, start_time, output)
         stdout.each_with_timeout(wait_thr.pid, 200, "r", &next_line)
       end
     rescue Timeout::Error
@@ -28,14 +28,16 @@ module MKV
 
     private
 
-    def next_line(line, filename, start_time, output)
-      if line =~ /(\d+)%/
-        progress = $1.to_i
-        yield(progress, Time.now.to_i - start_time, filename) if block_given?
-      end
-      if line =~ /Unsupported codec/
-        MKV.logger.error "Failed encoding...\nCommand\n#{command}\nOutput\n#{output}\n"
-        raise "Failed encoding: #{line}"
+    def next_line(filename, start_time, output)
+      Proc.new do |line|
+        if line =~ /(\d+)%/
+          progress = $1.to_i
+          yield(progress, Time.now.to_i - start_time, filename) if block_given?
+        end
+        if line =~ /Unsupported codec/
+          MKV.logger.error "Failed encoding...\nCommand\n#{command}\nOutput\n#{output}\n"
+          raise "Failed encoding: #{line}"
+        end
       end
     end
 

@@ -7,7 +7,6 @@ module MKV
       @number = data.fetch(:track_number).to_i
       @mkv_info_id = @number - 1
       @uid = data.fetch(:track_uid)
-      @lacing = data.fetch(:lacing_flag) != '0'
       @type = data.fetch(:track_type)
       @codec_id = data.fetch(:codec_id)
     end

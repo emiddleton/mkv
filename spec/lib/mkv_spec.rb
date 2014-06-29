@@ -12,9 +12,6 @@ describe MKV, '.mkvinfo_binary' do
   it 'can be overidden' do
     MKV.mkvinfo_binary = 'fooinfo'
     expect(MKV.mkvinfo_binary).to eq('fooinfo')
-  end
-
-  after do
     MKV.mkvinfo_binary = nil
   end
 end
@@ -27,9 +24,6 @@ describe MKV, '.mkvextract_binary' do
   it 'can be overidden' do
     MKV.mkvextract_binary = 'fooextract'
     expect(MKV.mkvextract_binary).to eq('fooextract')
-  end
-
-  after do
     MKV.mkvextract_binary = nil
   end
 end
