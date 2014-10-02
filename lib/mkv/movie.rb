@@ -58,7 +58,10 @@ module MKV
     end
 
     def split_by_episode
-      episodes.split!
+      chapter_ids = episodes.map do |episode|
+        chapters.offset_index(episode.first)
+      end
+      chapters.split!(path, chapter_ids)
     end
 
     private
@@ -75,13 +78,14 @@ module MKV
       "#{MKV.mkvinfo_binary} #{Shellwords.escape(path)}"
     end
 
-    def get_tracks
+   def get_tracks
       parser.titles.map do |track_data|
         MKV::TrackFactory.for(track_data[:track_type]).new(track_data)
       end
     end
 
     def get_chapters
+
       parser.chapters.map do |chapter|
         MKV::Chapter.new(chapter)
       end

@@ -1,5 +1,5 @@
 module MKV
-  module EpisodeFactory
+  class EpisodeFactory
     def self.for(chapters)
       ParseChapters.new(chapters).episodes
     end
@@ -26,12 +26,8 @@ module MKV
       end
 
       def normalized_durations
-        durations.map do |short|
-          if shorts.include?(short)
-            :short
-          else
-            :long
-          end
+        durations.map do |duration|
+          short_or_long(duration)
         end
       end
 
@@ -53,6 +49,14 @@ module MKV
 
       def durations
         @chapters.map { |chapter| chapter.duration }
+      end
+
+      def short_or_long(duration)
+        if shorts.include?(duration)
+          :short
+        else
+          :long
+        end
       end
     end
   end

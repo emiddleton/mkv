@@ -21,6 +21,7 @@ require 'mkv/chapters'
 require 'mkv/episode_factory'
 require 'mkv/episode'
 require 'mkv/track_factory'
+require 'mkv/video_splitter'
 
 module MKV
   # MKV logs information about its progress when it's transcoding.
@@ -74,6 +75,21 @@ module MKV
     @mkvextract_binary.nil? ? default_mkvextract_binary : @mkvextract_binary
   end
 
+  # Set the path of the mkvmerge binary.
+  # Can be useful if you need to specify a path such as /usr/local/bin/MKV
+  #
+  # @param [String] path to the mkvmerge binary
+  # @return [String] the path you set
+  def self.mkvmerge_binary=(bin)
+    @mkvmerge_binary = bin
+  end
+
+  # Get the path to the mkvmerge binary, defaulting to an OS-dependent path
+  #
+  # @return [String] the path to the mkvmerge binary
+  def self.mkvmerge_binary
+    @mkvmerge_binary.nil? ? default_mkvmerge_binary : @mkvmerge_binary
+  end
   private
 
   def self.default_mkvinfo_binary
@@ -89,6 +105,14 @@ module MKV
       "/Applications/Mkvtoolnix.app/Contents/MacOS/mkvextract"
     else
       'mkvextract'
+    end
+  end
+
+  def self.default_mkvmerge_binary
+    if is_macosx?
+      "/Applications/Mkvtoolnix.app/Contents/MacOS/mkvmerge"
+    else
+      'mkvmerge'
     end
   end
 

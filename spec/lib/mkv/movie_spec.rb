@@ -23,9 +23,12 @@ describe MKV::Movie do
     it 'gets the chapters for the movie' do
       MKV::Parser.stub(:new).and_return(
         double(MKV::Parser,
-          chapters: [{chapter_time_start: 'cool',
-          chapter_language: 'eng',
-          chapter_uid: '123333'}]))
+          chapters: [{
+            chapter_time_start: 'cool',
+            chapter_time_end: 'also cool',
+            chapter_language: 'eng',
+            chapter_uid: '123333'}]
+          ))
       expect(movie.chapters.first).to be_a MKV::Chapter
     end
   end
