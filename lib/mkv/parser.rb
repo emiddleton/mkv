@@ -6,7 +6,7 @@ module MKV
 
     def titles
       @data.split("| + A track")[1..-1].each.map do |track|
-        a3 = track.scan(/\|\s+\+\s+([^\:|^\n]+):\s([^\n[\s(])]+)/)
+        a3 = track.scan(/\|\s+\+\s+([^\:|^\n]+):\s([^\n[(])]+)/)
         to_hash(a3)
       end
     end
@@ -27,7 +27,7 @@ module MKV
     def to_hash(array)
       Hash[
         array.map do |key, value|
-          [convert_to_snake(key), value]
+          [convert_to_snake(key), value.strip]
         end
       ]
     end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-AUDIO_TRACK =  {track_type: 'audio', codec_id: 'A_AAC', sampling_frequency: '48000', channels: '2', language: 'eng', track_number: '4', track_uid: '1231234', lacing_flag: '0', language: 'eng', enabled: '0', default_flag: '0', forced_flag: '0' }
+AUDIO_TRACK =  {track_type: 'audio', codec_id: 'A_AAC', sampling_frequency: '48000', channels: '6', name: 'Surround 5.1', language: 'eng', track_number: '4', track_uid: '1231234', lacing_flag: '0', language: 'eng', enabled: '0', default_flag: '0', forced_flag: '0' }
 
 describe MKV::AudioTrack, '#type' do
   it 'returns the type' do
@@ -22,7 +22,13 @@ end
 
 describe MKV::AudioTrack, '#channels' do
   it 'returns the channels' do
-    expect(audio_track.channels).to eq 2
+    expect(audio_track.channels).to eq 6
+  end
+end
+
+describe MKV::AudioTrack, '#name' do
+  it 'returns the name' do
+    expect(audio_track.name).to eq 'Surround 5.1'
   end
 end
 
