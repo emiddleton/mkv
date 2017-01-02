@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-TRACK =  {track_type: 'audio', codec_id: 'A_AAC', sampling_frequency: '48000', channels: '2', language: 'eng', track_number: '4', track_uid: '1231234', lacing_flag: '0', language: 'eng', enabled: '0', default_flag: '0', forced_flag: '0', pixel_width: 123, pixel_height: '1235' }
+TRACK =  {track_type: 'audio', codec_id: 'A_AAC', sampling_frequency: '48000', channels: '2', language: 'eng', track_number: '4', track_id: '3', track_uid: '1231234', lacing_flag: '0', language: 'eng', enabled: '0', default_flag: '0', forced_flag: '0', pixel_width: 123, pixel_height: '1235' }
 
 
 describe MKV::Tracks, '#subtitles' do

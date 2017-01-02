@@ -19,6 +19,12 @@ describe MKV::Track do
     end
   end
 
+  describe '#track_id' do
+    it 'returns the track_id' do
+      expect(video_track.track_id).to eq 0
+    end
+  end
+
   describe '#mkv_info_id' do
     it 'returns the mkv_info_id' do
       expect(video_track.mkv_info_id).to eq 0
@@ -46,6 +52,7 @@ describe MKV::Track do
       codec_id: 'V_MPEG4/ISO/AVC',
       lacing_flag: '0',
       track_number: '1',
+      track_id: '0',
       track_type: 'video',
       track_uid: '2395334065'
     }

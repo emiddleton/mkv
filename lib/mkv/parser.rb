@@ -7,6 +7,8 @@ module MKV
     def titles
       @data.split("| + A track")[1..-1].each.map do |track|
         a3 = track.scan(/\|\s+\+\s+([^\:|^\n]+):\s([^\n[(])]+)/)
+        a2 = track.scan(/\s+\+\s+Track number: \d+ \((track ID) for mkvmerge & mkvextract: (\d+)\)/)
+        a3.concat(a2)
         to_hash(a3)
       end
     end

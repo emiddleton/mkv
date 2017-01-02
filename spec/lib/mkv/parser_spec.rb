@@ -3,7 +3,7 @@ require 'spec_helper'
 describe MKV::Parser, '#titles' do
   it 'generates a titles hash from raw data' do
     parser = MKV::Parser.new(raw_data)
-    expect(parser.titles).to eq([{track_number: '1', track_type: 'video', enabled: '1'}])
+    expect(parser.titles).to eq([{track_number: '1', track_id: '0', track_type: 'video', enabled: '1'}])
   end
 
   def raw_data

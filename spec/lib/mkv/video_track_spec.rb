@@ -31,6 +31,7 @@ describe MKV::VideoTrack do
       pixel_height: '360',
       pixel_width: '848',
       track_number: '1',
+      track_id: '0',
       track_type: 'video',
       track_type: 'video',
       track_uid: '2395334065'

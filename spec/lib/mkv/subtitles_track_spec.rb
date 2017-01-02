@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-SUBTITLES_TRACK =  { track_type: 'subtitles', codec_id: 'A_AAC', sampling_frequency: '48000', channels: '2', language: 'eng', track_number: '4', track_uid: '1231234', lacing_flag: '0', language: 'eng', enabled: '0' }
+SUBTITLES_TRACK =  { track_type: 'subtitles', codec_id: 'A_AAC', sampling_frequency: '48000', channels: '2', language: 'eng', track_number: '4', track_id: '3', track_uid: '1231234', lacing_flag: '0', language: 'eng', enabled: '0' }
 
 describe MKV::SubtitlesTrack, '#type' do
   it 'returns the type' do
